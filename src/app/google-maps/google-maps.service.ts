@@ -5,9 +5,10 @@ import { shareReplay } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ParkItem } from '../models';
+import LocalConfig from '../../../local.config.json';
 
 const API_URL = 'maps.googleapis.com/maps/api/js';
-const API_KEY = 'AIzaSyBG3CgdVvR19KIF5bb_d1N95JZO9uhM2E8';
+const API_KEY = LocalConfig.google_maps_api_key;
 
 @Injectable()
 export class GoogleMapsService implements MapProvider {
