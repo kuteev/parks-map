@@ -1,0 +1,26 @@
+:root {
+  --base-color: #CCDCD3;
+  --second-color: #69A685;
+  --third-color: #28784D;
+  --fourth-color: #034A24;
+  --fifth-color: #001D0D;
+}
+
+body{
+  /* background-color: var(--base-color) */
+}
+
+.container {
+    padding-top: 10px;
+
+  }
+
+.dev-border {
+    /*
+    padding-left: 0px; 
+    border-color: lightgray;
+    border-width: thin;
+    border-style: solid; 
+    */
+  }
+

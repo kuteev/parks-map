@@ -1,0 +1,10 @@
+<div class="card">
+    <div class="card-header">
+        <h5>Parks in the area</h5>
+    </div>
+    <div class="list-group" style="height: 600px; overflow-y: auto">
+        <a class="list-group-item rounded-0 border-0" *ngFor="let parkItem of parkItems" [class.active]="parkItem.isActive" (click)="parkItem.onClick(parkItem)">
+            <span>{{parkItem.name}}</span>
+        </a>
+    </div>
+</div>
