@@ -1,5 +1,6 @@
 import { Component, ElementRef, AfterViewInit } from '@angular/core';
-import { MapProvider } from '../interfaces/map-provider';
+import { MapProvider } from '../core/map-provider';
+import { MapController } from '../core/map-controller';
 import { ViewChild } from '@angular/core';
 import { ParkItem } from '../models/park-item';
 import { ParkMarker } from './park-marker.model';
@@ -16,7 +17,7 @@ export class MapAreaComponent implements AfterViewInit {
     private parkMarkers: ParkMarker[] = [];
     private currentBounds: google.maps.LatLngBounds;
 
-    constructor(private mapProviderService: MapProvider) { }
+    constructor(private mapProviderService: MapProvider, private mapControllerService: MapController) { }
 
     ngAfterViewInit() {
         // todo: move into a separate class
@@ -111,7 +112,7 @@ export class MapAreaComponent implements AfterViewInit {
             });
         }
 
-        this.mapProviderService.updateParkList(parkItems);
+        this.mapControllerService.updateParkList(parkItems);
     }
 
     private setMarkerActive(marker: ParkMarker): void {
