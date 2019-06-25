@@ -34,11 +34,14 @@ export class MapAreaComponent implements AfterViewInit {
 
             this.findPlaces();
 
-            this.map.addListener('dragend', () => {
-               console.log(this.map.getBounds());
-               this.currentBounds = this.map.getBounds();
-               this.findPlaces();
-              });
+            const reboundEvent = () => {
+                console.log(this.map.getBounds());
+                this.currentBounds = this.map.getBounds();
+                this.findPlaces();
+               };
+
+            this.map.addListener('dragend', reboundEvent);
+            this.map.addListener('zoom_changed', reboundEvent);
         });
     }
 
@@ -98,16 +101,9 @@ export class MapAreaComponent implements AfterViewInit {
                     id: p.place.place_id,
                     isActive: p.isActive,
                     onClick: (parkItem: ParkItem) => {
-                        this.parkMarkers.forEach(pm => pm.isActive = false);
                         this.map.setCenter({ lat, lng });
-                        this.parkMarkers.forEach(pm => {
-                            pm.marker.setAnimation(null);
-                            pm.isActive = false;
-                        });
-
                         this.parkMarkers.filter(pm => pm.place.place_id === parkItem.id).forEach(pm => {
-                            pm.isActive = true;
-                            pm.marker.setAnimation(google.maps.Animation.BOUNCE);
+                            this.setMarkerActive(pm);
                         });
                         this.updateService();
                     }
@@ -118,29 +114,29 @@ export class MapAreaComponent implements AfterViewInit {
         this.mapProviderService.updateParkList(parkItems);
     }
 
+    private setMarkerActive(marker: ParkMarker): void {
+        if (!marker.isActive) {
+            this.parkMarkers.forEach(m => {
+                if (m.place.place_id === marker.place.place_id) {
+                    m.isActive = true;
+                    m.marker.setAnimation(google.maps.Animation.BOUNCE);
+                } else {
+                    m.isActive = false;
+                    m.marker.setAnimation(null);
+                }
+            });
+        }
+    }
+
     private updateMarkers(places: google.maps.places.PlaceResult[]): void {
         places.forEach(place => {
             if (!this.parkMarkers.some(m => m.place.place_id === place.place_id)) {
                 const parkMarker: ParkMarker = new ParkMarker();
                 const marker = new google.maps.Marker({ map: this.map, position: place.geometry.location });
 
-                const resetAnimation = () => {
-                    this.parkMarkers.forEach(pm => {
-                        pm.marker.setAnimation(null);
-                        pm.isActive = false;
-                    });
-                };
-
-                const setActive = () => {
-                    parkMarker.isActive = true;
-                    this.updateService();
-                };
-
                 const listener = google.maps.event.addListener(marker, 'click', () => {
-                    // this.map.setCenter(place.geometry.location);
-                    resetAnimation();
-                    marker.setAnimation(google.maps.Animation.BOUNCE);
-                    setActive();
+                    this.setMarkerActive(parkMarker);
+                    this.updateService();
                 });
 
                 parkMarker.marker = marker;
