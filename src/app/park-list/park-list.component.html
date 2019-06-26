@@ -2,9 +2,23 @@
     <div class="card-header">
         <h5>Parks in the area ({{parkItems?.length}})</h5>
     </div>
-    <div class="list-group" style="height: 600px; overflow-y: auto">
-        <a class="list-group-item rounded-0 border-0" *ngFor="let parkItem of parkItems" [class.active]="parkItem.isActive" (click)="parkItem.onClick(parkItem)">
+    <div id="parkList" class="list-group" style="height: 600px; overflow-y: auto">
+        <a class="list-group-item rounded-0 border-0" *ngFor="let parkItem of parkItems"
+            [class.active]="parkItem.isActive" (click)="parkItem.onClick(parkItem)">
             <span>{{parkItem.name}}</span>
+            <div *ngIf="parkItem.isActive">
+                <div class="row" style="font-weight: normal;">
+                    <div class="col col-sm-2">
+                        <img [src]="parkItem.pictureUrl">
+                    </div>
+                    <div class="col col-sm-10">
+                        <ul style="list-style-type: none">
+                            <li>{{parkItem.address}}</li>
+                            <li>Rating: {{parkItem.rating}}/5</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </a>
     </div>
 </div>

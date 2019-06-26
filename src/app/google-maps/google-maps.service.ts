@@ -81,7 +81,6 @@ export class GoogleMapsService implements MapProvider {
                         status: google.maps.places.PlacesServiceStatus,
                         pagination: google.maps.places.PlaceSearchPagination) => {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
-              console.log('Fetched results: ' + results.length);
               subscriber.next(results);
               if (pagination.hasNextPage) {
                   pagination.nextPage();
@@ -162,6 +161,9 @@ export class GoogleMapsService implements MapProvider {
       parkItem.id = parkItemContainer.place.place_id;
       parkItem.isActive = parkItemContainer.isActive;
       parkItem.name = parkItemContainer.place.name;
+      parkItem.address = parkItemContainer.place.formatted_address;
+      parkItem.pictureUrl = parkItemContainer.place.icon;
+      parkItem.rating = parkItemContainer.place.rating;
       parkItems.push(parkItem);
     });
 
