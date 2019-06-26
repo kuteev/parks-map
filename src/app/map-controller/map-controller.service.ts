@@ -11,9 +11,6 @@ export class MapControllerService implements MapController {
     return this.parkListReplaySubject;
   }
 
-  updateLocation(): void {
-  }
-
   updateParkList(parks: ParkItem[]): void {
     this.parkListReplaySubject.next(parks);
   }

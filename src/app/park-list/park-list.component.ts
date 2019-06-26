@@ -12,8 +12,7 @@ export class ParkListComponent implements OnInit {
     parkItems: ParkItem[];
     element: HTMLElement;
 
-    constructor(private mapControllerService: MapController) {
-    }
+    constructor(private mapControllerService: MapController) { }
 
     ngOnInit() {
         this.element = document.getElementById('parkList');

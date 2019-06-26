@@ -4,7 +4,7 @@ export class ParkItem {
     public pictureUrl: string;
     public rating: number;
     public id: string;
-    public onClick?: Function; // todo: rename to setActive?
+    public onClick?: Function;
     public onHover?: Function;
     public isActive: boolean;
 }

@@ -1,12 +1,11 @@
 import { Injectable, Inject, ElementRef } from '@angular/core';
-import { MapProvider } from '../core/map-provider';
-import { ParkItemContainer } from './park-item-container.model';
+import { DOCUMENT } from '@angular/common';
 import { Observable, Subscriber, Subject } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
-import { DOCUMENT } from '@angular/common';
+import { MapProvider } from '../core/map-provider';
+import { ParkItemContainer } from './park-item-container.model';
 import { ParkItem } from '../models/park-item';
 import LocalConfig from '../../../local.config.json';
-
 
 const API_URL = 'maps.googleapis.com/maps/api/js';
 const API_KEY = LocalConfig.google_maps_api_key;
@@ -24,10 +23,6 @@ export class GoogleMapsService implements MapProvider {
 
   getProviderName() {
     return 'Google Maps';
-  }
-
-  load(): Observable<Event | void> {
-    return this.loader;
   }
 
   initialize(element: ElementRef): Observable<void> {
@@ -64,14 +59,13 @@ export class GoogleMapsService implements MapProvider {
       // subscribing for map movements
       this.map.addListener('idle', findParksTask);
 
-      // todo: reduce code
+      // subscribing for park list updates
       this.parkListUpdateSubject.subscribe(() => {
         subscriber.next(this.toParkItems(this.parkItemContainers));
       });
     });
   }
 
-  // finds parks on current area and returns a complete
   findParks(): Observable<google.maps.places.PlaceResult[]> {
     return new Observable<google.maps.places.PlaceResult[]>(subscriber => {
       const request = { bounds: this.map.getBounds(), query: '', type: 'park', location: this.map.getCenter() };
@@ -100,6 +94,10 @@ export class GoogleMapsService implements MapProvider {
       this.setMarkerActive(parkItemContainer);
     }
     return this.toParkItems(this.parkItemContainers);
+  }
+
+  private load(): Observable<Event|void> {
+    return this.loader;
   }
 
   private setMarkerActive(parkItemContainer: ParkItemContainer): void {
@@ -188,7 +186,3 @@ export class GoogleMapsService implements MapProvider {
     });
   }
 }
-
-
-// read:
-// https://stackoverflow.com/questions/34894732/add-padding-to-google-maps-bounds-contains

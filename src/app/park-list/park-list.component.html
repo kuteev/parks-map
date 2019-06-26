@@ -4,7 +4,7 @@
     </div>
     <div id="parkList" class="list-group" style="height: 600px; overflow-y: auto">
         <a class="list-group-item rounded-0 border-0" *ngFor="let parkItem of parkItems"
-            [class.active]="parkItem.isActive" (click)="parkItem.onClick(parkItem)">
+            [class.active]="parkItem.isActive" (click)="parkItem.onClick()">
             <span>{{parkItem.name}}</span>
             <div *ngIf="parkItem.isActive">
                 <div class="row" style="font-weight: normal;">

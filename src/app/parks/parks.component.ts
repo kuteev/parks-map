@@ -2,10 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'parks',
-    templateUrl: './parks.component.html',
-    styleUrls: ['./parks.component.css']
+    templateUrl: './parks.component.html'
 })
 
-export class ParksComponent {
-    
-}
+export class ParksComponent { }
