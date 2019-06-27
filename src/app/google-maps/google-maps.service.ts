@@ -68,7 +68,17 @@ export class GoogleMapsService implements MapProvider {
     });
   }
 
-  findParks(): Observable<google.maps.places.PlaceResult[]> {
+  setActive(parkItem: ParkItem): ParkItem[] {
+    const parkItemContainer: ParkItemContainer = this.findInParkItemContainers(parkItem);
+    if (parkItemContainer) {
+      this.map.setCenter({ lat: parkItemContainer.place.geometry.location.lat(), lng: parkItemContainer.place.geometry.location.lng() });
+      this.updatePhotoUrl(parkItemContainer);
+      this.setMarkerActive(parkItemContainer);
+    }
+    return this.toParkItems(this.parkItemContainers);
+  }
+
+  private findParks(): Observable<google.maps.places.PlaceResult[]> {
     return new Observable<google.maps.places.PlaceResult[]>(subscriber => {
       const request = { bounds: this.map.getBounds(), query: '', type: 'park', location: this.map.getCenter() };
       const callBack = (results: google.maps.places.PlaceResult[],
@@ -85,16 +95,6 @@ export class GoogleMapsService implements MapProvider {
       };
       this.placesService.textSearch(request, callBack);
     });
-  }
-
-  setActive(parkItem: ParkItem): ParkItem[] {
-    const parkItemContainer: ParkItemContainer = this.findInParkItemContainers(parkItem);
-    if (parkItemContainer) {
-      this.map.setCenter({ lat: parkItemContainer.place.geometry.location.lat(), lng: parkItemContainer.place.geometry.location.lng() });
-      this.updatePhotoUrl(parkItemContainer);
-      this.setMarkerActive(parkItemContainer);
-    }
-    return this.toParkItems(this.parkItemContainers);
   }
 
   private updatePhotoUrl(parkItemContainer: ParkItemContainer): void {

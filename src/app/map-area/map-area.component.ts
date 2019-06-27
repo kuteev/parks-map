@@ -1,8 +1,8 @@
 import { Component, ElementRef, AfterViewInit } from '@angular/core';
 import { MapProvider } from '../core/map-provider';
-import { MapController } from '../core/map-controller';
 import { ViewChild } from '@angular/core';
 import { ParkItem } from '../models/park-item';
+import { ParkListService } from '../core/park-list.service';
 
 @Component({
     selector: 'map-area',
@@ -12,7 +12,7 @@ import { ParkItem } from '../models/park-item';
 export class MapAreaComponent implements AfterViewInit {
     @ViewChild('mapcontainer', { static: true }) private gmapElement: ElementRef;
 
-    constructor(private mapProviderService: MapProvider, private mapControllerService: MapController) { }
+    constructor(private mapProviderService: MapProvider, private parkListService: ParkListService) { }
 
     ngAfterViewInit() {
         this.mapProviderService.initialize(this.gmapElement).subscribe(nothing => {
@@ -32,6 +32,6 @@ export class MapAreaComponent implements AfterViewInit {
             }
         });
 
-        this.mapControllerService.updateParkList(parkItems);
+        this.parkListService.next(parkItems);
     }
 }

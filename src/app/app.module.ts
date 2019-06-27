@@ -9,8 +9,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ParksComponent } from './parks/parks.component';
 import { MapProvider } from './core/map-provider';
 import { GoogleMapsService } from './google-maps/google-maps.service';
-import { MapController } from './core/map-controller';
-import { MapControllerService } from './map-controller/map-controller.service';
+import { ParkListService } from './core/park-list.service';
 
 @NgModule({
   declarations: [
@@ -26,8 +25,8 @@ import { MapControllerService } from './map-controller/map-controller.service';
     AppRoutingModule,
   ],
   providers: [
-    { provide: MapProvider, useClass: GoogleMapsService },
-    { provide: MapController, useClass: MapControllerService }
+    ParkListService,
+    { provide: MapProvider, useClass: GoogleMapsService }
   ],
   bootstrap: [AppComponent]
 })

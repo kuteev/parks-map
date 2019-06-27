@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ParkItem } from '../models/park-item';
-import { MapController } from '../core/map-controller';
+import { ParkListService } from '../core/park-list.service';
 
 @Component({
     selector: 'park-list',
@@ -12,11 +12,11 @@ export class ParkListComponent implements OnInit {
     parkItems: ParkItem[];
     element: HTMLElement;
 
-    constructor(private mapControllerService: MapController) { }
+    constructor(private parkListService: ParkListService) { }
 
     ngOnInit() {
         this.element = document.getElementById('parkList');
-        this.mapControllerService.getParksSubscription().subscribe((parks) => {
+        this.parkListService.subscribe((parks) => {
             this.parkItems = parks;
             this.updateScroll();
         });

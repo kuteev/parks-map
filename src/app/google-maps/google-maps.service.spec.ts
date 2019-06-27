@@ -12,7 +12,12 @@ describe('GoogleMapsService', () => {
         googleMapsService = new GoogleMapsService(mockDocument);
 
         // stub map object
-        googleMapsService['map'] = { } as google.maps.Map;
+        googleMapsService['map'] = {
+            addListener: (eventName, handler) => { },
+            getBounds: () => new google.maps.LatLngBounds(),
+            getCenter: () => new google.maps.LatLng(100, 100),
+            setCenter: (latLng) => {}
+         } as google.maps.Map;
 
         // stub placesService object
         googleMapsService['placesService'] = { } as google.maps.places.PlacesService;
