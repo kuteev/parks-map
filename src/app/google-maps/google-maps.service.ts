@@ -16,8 +16,9 @@ export class GoogleMapsService implements MapProvider {
   private map: google.maps.Map;
   private parkItemContainers: ParkItemContainer[] = [];
   private parkListUpdateSubject: Subject<void> = new Subject<void>();
+  private placesService: google.maps.places.PlacesService;
 
-  constructor(@Inject(DOCUMENT) private document: any) {
+  constructor(@Inject(DOCUMENT) private document: HTMLDocument) {
     this.loader = this._loader().pipe(shareReplay(1));
   }
 
@@ -27,7 +28,7 @@ export class GoogleMapsService implements MapProvider {
 
   initialize(element: ElementRef): Observable<void> {
     return new Observable<void>(subscriber => {
-      this.load().subscribe((a) => {
+      this.load().subscribe(() => {
         const mapProp: google.maps.MapOptions = {
             center: new google.maps.LatLng(36.845784, -76.196460),
             zoom: 15,
@@ -37,6 +38,7 @@ export class GoogleMapsService implements MapProvider {
             fullscreenControl: false
         };
         this.map = new google.maps.Map(element.nativeElement, mapProp);
+        this.placesService = new google.maps.places.PlacesService(this.map);
         subscriber.next();
         subscriber.complete();
       });
@@ -69,8 +71,6 @@ export class GoogleMapsService implements MapProvider {
   findParks(): Observable<google.maps.places.PlaceResult[]> {
     return new Observable<google.maps.places.PlaceResult[]>(subscriber => {
       const request = { bounds: this.map.getBounds(), query: '', type: 'park', location: this.map.getCenter() };
-      const service = new google.maps.places.PlacesService(this.map);
-
       const callBack = (results: google.maps.places.PlaceResult[],
                         status: google.maps.places.PlacesServiceStatus,
                         pagination: google.maps.places.PlaceSearchPagination) => {
@@ -83,7 +83,7 @@ export class GoogleMapsService implements MapProvider {
               }
           }
       };
-      service.textSearch(request, callBack);
+      this.placesService.textSearch(request, callBack);
     });
   }
 
@@ -99,7 +99,7 @@ export class GoogleMapsService implements MapProvider {
 
   private updatePhotoUrl(parkItemContainer: ParkItemContainer): void {
     if (parkItemContainer.place.photos && parkItemContainer.place.photos.length > 0) {
-      parkItemContainer.place.icon = parkItemContainer.place.photos[0].getUrl({maxHeight : 80, maxWidth : 100});
+      parkItemContainer.place.icon = parkItemContainer.place.photos[0].getUrl({maxHeight : 200, maxWidth : 200});
     }
   }
 
