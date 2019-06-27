@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavBarComponent } from './nav/nav-bar.component';
+import { HeaderComponent } from './header/header.component';
 import { MapAreaComponent } from './map-area/map-area.component';
 import { ParkListComponent } from './park-list/park-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -15,7 +15,7 @@ import { MapControllerService } from './map-controller/map-controller.service';
 @NgModule({
   declarations: [
     AppComponent,
-    NavBarComponent,
+    HeaderComponent,
     MapAreaComponent,
     ParkListComponent,
     PageNotFoundComponent,

@@ -91,9 +91,16 @@ export class GoogleMapsService implements MapProvider {
     const parkItemContainer: ParkItemContainer = this.findInParkItemContainers(parkItem);
     if (parkItemContainer) {
       this.map.setCenter({ lat: parkItemContainer.place.geometry.location.lat(), lng: parkItemContainer.place.geometry.location.lng() });
+      this.updatePhotoUrl(parkItemContainer);
       this.setMarkerActive(parkItemContainer);
     }
     return this.toParkItems(this.parkItemContainers);
+  }
+
+  private updatePhotoUrl(parkItemContainer: ParkItemContainer): void {
+    if (parkItemContainer.place.photos && parkItemContainer.place.photos.length > 0) {
+      parkItemContainer.place.icon = parkItemContainer.place.photos[0].getUrl({maxHeight : 80, maxWidth : 100});
+    }
   }
 
   private load(): Observable<Event|void> {
@@ -130,6 +137,7 @@ export class GoogleMapsService implements MapProvider {
 
         container.marker = new google.maps.Marker({ map: this.map, position: placeResult.geometry.location });
         container.clickListener = google.maps.event.addListener(container.marker, 'click', () => {
+          this.updatePhotoUrl(container);
           this.setMarkerActive(container);
           this.parkListUpdateSubject.next();
         });
@@ -162,6 +170,7 @@ export class GoogleMapsService implements MapProvider {
       parkItem.address = parkItemContainer.place.formatted_address;
       parkItem.pictureUrl = parkItemContainer.place.icon;
       parkItem.rating = parkItemContainer.place.rating;
+      parkItem.isOpenNow = parkItemContainer.place.opening_hours && parkItemContainer.place.opening_hours.open_now;
       parkItems.push(parkItem);
     });
 
