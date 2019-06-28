@@ -1,7 +1,7 @@
 # ParksMap
 
 A website that pulls parks from Google maps and displays them interactively on the map and a side panel.
-Google maps API can be easily swapped for another map provider by implementting MapProvider abstract service class.
+Google maps API can be easily swapped for another map provider by implementing MapProvider abstract service class.
 
 ## Development server
 
